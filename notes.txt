@@ -1,0 +1,29 @@
+* Canvas that shows selected file
+* Make a canvas that shows compressed webp data from selected file
+
+
+Components
+
+* Tabs
+* Tab
+  * Name
+* Panes
+  * x
+  * y
+  * zoom
+* Pane
+  * image
+  * title
+* Zoomer
+  * zoom
+* Compressor
+  * image
+  * compressedImage
+  * configForm
+  * config
+  * name
+  * cmdLine
+* CompressionOpts
+  * configForm
+* CompressorCmdView
+  * cmdLine
