@@ -10,6 +10,8 @@
     this.qualitySetting_ = this.$('.quality-setting');
     this.alphaQualityRange_ = this.$('.alpha-quality');
     this.alphaQualitySetting_ = this.$('.alpha-quality-setting');
+    this.method_ = this.$('.method');
+    this.segments_ = this.$('.segments');
     this.opts = null;
 
     this.qualityRange_.addEventListener('change', function() {
@@ -22,6 +24,14 @@
       webpOptions.formChange_();
     });
 
+    this.method_.addEventListener('change', function() {
+      webpOptions.formChange_();
+    });
+
+    this.segments_.addEventListener('change', function() {
+      webpOptions.formChange_();
+    });
+
     this.buildOpts_();
     this.updateQualityLabel_();
     this.updateAlphaQualityLabel_();
@@ -31,8 +41,7 @@
 
   WebpOptionsProto.buildOpts_ = function() {
     var opts = {};
-    var q = this.qualityRange_.value;
-    var alpha_q = this.alphaQualityRange_.value;
+    var q = Number(this.qualityRange_.value);
 
     if (q == 101) {
       opts.lossless = 1;
@@ -40,10 +49,10 @@
     else {
       opts.q = q;
     }
-
-    if (alpha_q !== undefined) {
-      opts.alpha_q = alpha_q;
-    }
+    
+    opts.alpha_q = Number(this.alphaQualityRange_.value);
+    opts.m = Number(this.method_.value);
+    opts.segments = Number(this.segments_.value);
 
     this.opts = opts;
   };
