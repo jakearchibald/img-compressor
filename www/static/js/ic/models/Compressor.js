@@ -1,10 +1,10 @@
 (function() {
-  function Compressor(name) {
-    this.name = name;
+  function Compressor() {
+    this.name = '';
     this.url = ''; // url to compressor
     this.output = null; // blob?
     this.input = null; // blob?
-    this.opts = {}; // cmd line opts
+    this.opts = {}; // compressor options
   }
 
   var CompressorProto = Compressor.prototype;

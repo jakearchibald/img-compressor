@@ -1,6 +1,10 @@
 function MainCtrl($scope) {
+  var webpCompressor = new ic.models.WebpCompressor();
+
   $scope.compressors = [
-    new ic.models.Compressor('none'),
-    new ic.models.Compressor('WebP')
+    new ic.models.NullCompressor(),
+    webpCompressor
   ];
+
+  console.log($scope.compressors);
 }

@@ -11,10 +11,11 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       jsfiles: [
-        'www/static/js/angular.js',
         'www/static/js/ic/index.js',
         'www/static/js/ic/models/index.js',
         'www/static/js/ic/models/Compressor.js',
+        'www/static/js/ic/models/NullCompressor.js',
+        'www/static/js/ic/models/WebpCompressor.js',
         'www/static/js/main.js'
       ]
     },
