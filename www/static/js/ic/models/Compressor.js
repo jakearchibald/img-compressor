@@ -24,7 +24,7 @@
 
     this.lastRequest_ = ic.utils.post(this.url, {
       id: this.input.id,
-      q: this.opts.q
+      q: this.opts.q || 80
     }, {
       responseType: 'blob'
     });

@@ -25,6 +25,7 @@ module.exports = function(grunt) {
         'www/static/js/ic/views/ImageInput.js',
         'www/static/js/ic/views/ImageOutput.js',
         'www/static/js/ic/views/WebpOptions.js',
+        'www/static/js/ic/views/ImageStats.js',
         'www/static/js/main.js'
       ]
     },
