@@ -32,30 +32,22 @@
       webpOptions.formChange_();
     });
 
+    // Translate elements into compressor option values
+    // element, type, prop, translate
+    this.optsSpec_ = [
+      [this.qualityRange_, Number, 'q', function(val) { if (val < 101) return val; }],
+      [this.qualityRange_, Number, 'lossless', function(val) { if (val === 101) return 1; }],
+      [this.alphaQualityRange_, Number, 'alpha_q'],
+      [this.method_, Number, 'm'],
+      [this.segments_, Number, 'segments']
+    ];
+
     this.buildOpts_();
     this.updateQualityLabel_();
     this.updateAlphaQualityLabel_();
   }
 
-  var WebpOptionsProto = WebpOptions.prototype = Object.create(ic.views.View.prototype);
-
-  WebpOptionsProto.buildOpts_ = function() {
-    var opts = {};
-    var q = Number(this.qualityRange_.value);
-
-    if (q == 101) {
-      opts.lossless = 1;
-    }
-    else {
-      opts.q = q;
-    }
-    
-    opts.alpha_q = Number(this.alphaQualityRange_.value);
-    opts.m = Number(this.method_.value);
-    opts.segments = Number(this.segments_.value);
-
-    this.opts = opts;
-  };
+  var WebpOptionsProto = WebpOptions.prototype = Object.create(ic.views.CompressorOptions.prototype);
 
   WebpOptionsProto.formChange_ = ic.utils.debounce(function() {
     this.buildOpts_();
