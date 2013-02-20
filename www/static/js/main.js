@@ -1,10 +1,12 @@
-function MainCtrl($scope) {
-  var webpCompressor = new ic.models.WebpCompressor();
+(function() {
+  var imageInputView = new ic.views.ImageInput();
+  var inputImageModel = new ic.models.InputImage();
 
-  $scope.compressors = [
-    new ic.models.NullCompressor(),
-    webpCompressor
-  ];
+  imageInputView.appendTo(document.body);
 
-  console.log($scope.compressors);
-}
+  imageInputView.on('imageChange', function(file) {
+    inputImageModel.upload(file).then(function() {
+      console.log('Done!');
+    });
+  });
+}());

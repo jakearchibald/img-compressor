@@ -11,11 +11,19 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       jsfiles: [
+        'www/static/js/q.js',
         'www/static/js/ic/index.js',
+        'www/static/js/ic/utils.js',
         'www/static/js/ic/models/index.js',
         'www/static/js/ic/models/Compressor.js',
         'www/static/js/ic/models/NullCompressor.js',
         'www/static/js/ic/models/WebpCompressor.js',
+        'www/static/js/ic/models/InputImage.js',
+        'www/static/js/ic/EventEmitter.js',
+        'www/static/js/ic/views/index.js',
+        'www/static/js/ic/views/View.js',
+        'www/static/js/ic/views/ImageInput.js',
+        'www/static/js/ic/views/ImageOutput.js',
         'www/static/js/main.js'
       ]
     },
