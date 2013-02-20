@@ -7,15 +7,20 @@
 
     this.el = el.cloneNode(true);
     this.qualityRange = this.$('.quality');
+    this.qualitySetting = this.$('.quality-setting');
     this.opts = null;
 
-    var formChange = ic.utils.debounce(function() {
-      webpOptions.buildOpts_();
-      webpOptions.trigger('optionsChange');
-    }, 100);
+    function qualitySettingUpdate() {
+      webpOptions.qualitySetting.textContent = webpOptions.qualityRange.value;
+    }
 
-    this.qualityRange.addEventListener('change', formChange);
+    this.qualityRange.addEventListener('change', function() {
+      webpOptions.updateQualityLabel_();
+      webpOptions.formChange_();
+    });
+
     this.buildOpts_();
+    this.updateQualityLabel_();
   }
 
   var WebpOptionsProto = WebpOptions.prototype = Object.create(ic.views.View.prototype);
@@ -24,6 +29,15 @@
     this.opts = {
       q: Number(this.qualityRange.value)
     };
+  };
+
+  WebpOptionsProto.formChange_ = ic.utils.debounce(function() {
+    this.buildOpts_();
+    this.trigger('optionsChange');
+  }, 100);
+
+  WebpOptionsProto.updateQualityLabel_ = function() {
+    this.qualitySetting.textContent = this.qualityRange.value;
   };
 
   ic.views.WebpOptions = WebpOptions;
