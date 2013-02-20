@@ -14,6 +14,9 @@
 
   CompressorProto.compress = function() {
     var compressor = this;
+    var postData = ic.utils.extend({
+      id: this.input.id
+    }, this.opts);
 
     this.outputImage_ = null;
 
@@ -22,10 +25,7 @@
       this.lastRequest_.abort();
     }
 
-    this.lastRequest_ = ic.utils.post(this.url, {
-      id: this.input.id,
-      q: this.opts.q || 80
-    }, {
+    this.lastRequest_ = ic.utils.post(this.url, postData, {
       responseType: 'blob'
     });
 

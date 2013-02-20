@@ -36,13 +36,6 @@ app.post('/compress/upload', function(req, res) {
 
 app.post('/compress/webp', function(req, res) {
   var id = req.body.id;
-  var q = req.body.q || 80;
-
-  function requestEnd() {
-    fs.unlink(outfile);
-  }
-
-  res.on('close', requestEnd);
 
   if (!id) {
     res.status(400).json({
@@ -51,10 +44,37 @@ app.post('/compress/webp', function(req, res) {
     return;
   }
 
+  var args = [];
+
+  var opts = {
+    q: Number(req.body.q),
+    lossless: Boolean(req.body.lossless),
+    alpha_q: Number(req.body.alpha_q)
+  };
+
+  if (opts.lossless) {
+    args.push('-lossless');
+  }
+  else if ('q' in opts) {
+    args.push('-q', opts.q);
+  }
+  if ('alpha_q' in opts) {
+    args.push('-alpha_q', opts.alpha_q);
+  }
+
+  function requestEnd() {
+    fs.unlink(outfile);
+  }
+
+  res.on('close', requestEnd);
+
+
   var error = '';
   var outfile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.webp';
   
-  var cmd = spawn('bin/cwebp', ['-q', q, 'upload-tmp/' + id, '-o', outfile]).on('exit', function(code) {
+  args.push('upload-tmp/' + id, '-o', outfile);
+
+  var cmd = spawn('bin/cwebp', args).on('exit', function(code) {
     if (code) {
       res.status(400).json({
         err: error
@@ -77,6 +97,7 @@ app.get('/img-test/', function(req, res) {
 
   var cmd = spawn('bin/cwebp', ['-q', '80', 'img-tmp/to-encode.png', '-o', outfile]).on('exit', function(code) {
     if (code) {
+      console.log(error);
       res.send(error);
     }
     else {
