@@ -58,6 +58,34 @@
       opt: 'segments'
     });
 
+    this.addOpt_({
+      field: '.filter',
+      opt: 'f',
+      outputEl: '.filter-setting',
+      outputTransform: function(val) {
+        if (val === 0) return "Off";
+        return val;
+      }
+    });
+
+    this.addOpt_({
+      field: '.sharpness',
+      opt: 'sharpness',
+      outputEl: '.sharpness-setting',
+      outputTransform: function(val) {
+        if (val == 7) return "Max";
+        return val;
+      },
+      valueTransform: function(val) {
+        return 7 - val;
+      }
+    });
+
+    this.addOpt_({
+      field: '.strong-filter',
+      opt: 'strong'
+    });
+
     ic.views.CompressorOptions.call(this);
   }
 

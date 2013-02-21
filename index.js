@@ -46,33 +46,28 @@ app.post('/compress/webp', function(req, res) {
 
   var args = [];
 
-  var opts = {
-    q: Number(req.body.q),
-    lossless: Boolean(req.body.lossless),
-    alpha_q: Number(req.body.alpha_q),
-    m: Number(req.body.m),
-    segments: Number(req.body.segments),
-    sns: Number(req.body.sns)
-  };
+  function addArg(prop, cast) {
+    cast = cast || Number;
 
-  if (opts.lossless) {
-    args.push('-lossless');
+    if (prop in req.body) {
+      if (cast === Boolean && req.body[prop]) {
+        args.push('-' + prop);
+      }
+      else {
+        args.push('-' + prop, cast(req.body[prop]));
+      }
+    }
   }
-  else if ('q' in opts) {
-    args.push('-q', opts.q);
-  }
-  if ('alpha_q' in opts) {
-    args.push('-alpha_q', opts.alpha_q);
-  }
-  if ('m' in opts) {
-    args.push('-m', opts.m);
-  }
-  if ('segments' in opts) {
-    args.push('-segments', opts.segments);
-  }
-  if ('sns' in opts) {
-    args.push('-sns', opts.sns);
-  }
+
+  addArg('q');
+  addArg('lossless', Boolean);
+  addArg('alpha_q');
+  addArg('m');
+  addArg('segments');
+  addArg('sns');
+  addArg('f');
+  addArg('sharpness');
+  addArg('strong', Boolean);
 
   function requestEnd() {
     fs.unlink(outfile);

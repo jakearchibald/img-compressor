@@ -10,16 +10,19 @@
     var opts = {};
 
     this.optsSpec_.forEach(function(spec) {
-      var field = spec.field;
       var transform = spec.valueTransform;
-      var val = spec.cast(field.value);
-
-      if (transform) {
-        val = transform(val);
-      }
+      var val = spec.getVal();
 
       if (val !== undefined) {
-        opts[spec.opt] = val;
+        val = spec.cast(val);
+
+        if (transform) {
+          val = transform(val);
+        }
+        
+        if (val !== undefined) {
+          opts[spec.opt] = val;
+        }
       }
     });
 
@@ -47,6 +50,17 @@
     var field = params.field = this.$(params.field);
     var outputEl;
 
+    if (field.type == 'checkbox') {
+      params.getVal = function() {
+        if (field.checked) return field.value;
+      };
+    }
+    else {
+      params.getVal = function() {
+        return field.value;
+      };
+    }
+
     if (params.outputEl) {
       outputEl = params.outputEl = this.$(params.outputEl);
     }
@@ -54,10 +68,10 @@
     function updateLabel() {
       if (outputEl) {
         if (params.outputTransform) {
-          outputEl.textContent = params.outputTransform(field.value);
+          outputEl.textContent = params.outputTransform(params.cast(params.getVal()));
         }
         else {
-          outputEl.textContent = field.value;
+          outputEl.textContent = params.getVal();
         }
       }
     }
