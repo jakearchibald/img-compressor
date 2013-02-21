@@ -51,7 +51,9 @@ app.post('/compress/webp', function(req, res) {
     lossless: Boolean(req.body.lossless),
     alpha_q: Number(req.body.alpha_q),
     m: Number(req.body.m),
-    segments: Number(req.body.segments)
+    segments: Number(req.body.segments),
+    psnr: Number(req.body.psnr),
+    sns: Number(req.body.sns)
   };
 
   if (opts.lossless) {
@@ -68,6 +70,12 @@ app.post('/compress/webp', function(req, res) {
   }
   if ('segments' in opts) {
     args.push('-segments', opts.segments);
+  }
+  if ('psnr' in opts) {
+    args.push('-psnr', opts.psnr);
+  }
+  if ('sns' in opts) {
+    args.push('-sns', opts.sns);
   }
 
   function requestEnd() {

@@ -10,6 +10,10 @@
     this.qualitySetting_ = this.$('.quality-setting');
     this.alphaQualityRange_ = this.$('.alpha-quality');
     this.alphaQualitySetting_ = this.$('.alpha-quality-setting');
+    this.psnrRange_ = this.$('.psnr');
+    this.psnrSetting_ = this.$('.psnr-setting');
+    this.snsRange_ = this.$('.sns');
+    this.snsSetting_ = this.$('.sns-setting');
     this.method_ = this.$('.method');
     this.segments_ = this.$('.segments');
     this.opts = null;
@@ -21,6 +25,16 @@
 
     this.alphaQualityRange_.addEventListener('change', function() {
       webpOptions.updateAlphaQualityLabel_();
+      webpOptions.formChange_();
+    });
+
+    this.psnrRange_.addEventListener('change', function() {
+      webpOptions.updatePsnrLabel_();
+      webpOptions.formChange_();
+    });
+
+    this.snsRange_.addEventListener('change', function() {
+      webpOptions.updateSnsLabel_();
       webpOptions.formChange_();
     });
 
@@ -39,12 +53,16 @@
       [this.qualityRange_, Number, 'lossless', function(val) { if (val === 101) return 1; }],
       [this.alphaQualityRange_, Number, 'alpha_q'],
       [this.method_, Number, 'm'],
-      [this.segments_, Number, 'segments']
+      [this.segments_, Number, 'segments'],
+      [this.psnrRange_, Number, 'psnr', function(val) { if (val) return val; }],
+      [this.snsRange_, Number, 'sns']
     ];
 
     this.buildOpts_();
     this.updateQualityLabel_();
     this.updateAlphaQualityLabel_();
+    this.updatePsnrLabel_();
+    this.updateSnsLabel_();
   }
 
   var WebpOptionsProto = WebpOptions.prototype = Object.create(ic.views.CompressorOptions.prototype);
@@ -73,6 +91,28 @@
     }
     else {
       this.alphaQualitySetting_.textContent = val;
+    }
+  };
+
+  WebpOptionsProto.updatePsnrLabel_ = function() {
+    var val = Number(this.psnrRange_.value);
+
+    if (val === 0) {
+      this.psnrSetting_.textContent = "Auto";
+    }
+    else {
+      this.psnrSetting_.textContent = val + 'dB';
+    }
+  };
+
+  WebpOptionsProto.updateSnsLabel_ = function() {
+    var val = Number(this.snsRange_.value);
+
+    if (val === 0) {
+      this.snsSetting_.textContent = "Off";
+    }
+    else {
+      this.snsSetting_.textContent = val;
     }
   };
 
