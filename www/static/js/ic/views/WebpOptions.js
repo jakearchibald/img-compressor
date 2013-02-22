@@ -37,8 +37,7 @@
         return val;
       },
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -51,8 +50,7 @@
         return val;
       },
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -65,8 +63,7 @@
       field: '.segments',
       opt: 'segments',
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -79,8 +76,7 @@
         return val;
       },
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -96,8 +92,7 @@
         return 7 - val;
       },
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -105,8 +100,7 @@
       field: '.strong-filter',
       opt: 'strong',
       applicable: function(opts) {
-        if (opts.lossless) return false;
-        return true;
+        return !opts.lossless;
       }
     });
 
@@ -125,6 +119,30 @@
       field: '.hint',
       cast: String,
       opt: 'hint'
+    });
+
+    this.addOpt_({
+      field: '.colors',
+      opt: 'colors',
+      outputEl: '.colors-setting',
+      outputTransform: function(val) {
+        if (val === 257) return "32bit";
+        return val;
+      },
+      valueTransform: function(val) {
+        if (val !== 257) return val;
+      },
+      applicable: function(opts) {
+        return opts.lossless;
+      }
+    });
+
+    this.addOpt_({
+      field: '.dither',
+      opt: 'dither',
+      applicable: function(opts) {
+        return !!opts.colors;
+      }
     });
 
     ic.views.CompressorOptions.call(this);

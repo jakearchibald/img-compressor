@@ -34,6 +34,34 @@ app.post('/compress/upload', function(req, res) {
   }
 });
 
+function reduceColors(inFile, colors, dither, callback) {
+  var args = [];
+  var outFile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.png';
+  var error = '';
+
+  if (!dither) {
+    args.push('--nofs');
+  }
+
+  args.push(colors);
+
+  var cmd = spawn('bin/pngquant', args).on('exit', function(code) {
+    if (code) {
+      callback(error);
+    }
+    else {
+      callback(null, outFile);
+    }
+  });
+
+  cmd.stdout.pipe(fs.createWriteStream(outFile));
+  fs.createReadStream(inFile).pipe(cmd.stdin);
+
+  cmd.stderr.on('data', function(data) {
+    error += data;
+  });
+}
+
 app.post('/compress/webp', function(req, res) {
   var id = req.body.id;
 
@@ -73,32 +101,58 @@ app.post('/compress/webp', function(req, res) {
   addArg('hint', String);
 
   function requestEnd() {
-    fs.unlink(outfile);
+    fs.unlink(outFile);
+
+    if (reducedInFile) {
+      fs.unlink(reducedInFile);
+    }
   }
 
   res.on('close', requestEnd);
 
-
   var error = '';
-  var outfile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.webp';
-  
-  args.push('upload-tmp/' + id, '-o', outfile);
+  var inFile = 'upload-tmp/' + id;
+  var outFile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.webp';
+  var reducedInFile;
 
-  var cmd = spawn('bin/cwebp', args).on('exit', function(code) {
-    if (code) {
-      res.status(400).json({
-        err: error
-      });
-      requestEnd();
-    }
-    else {
-      res.sendfile(outfile, requestEnd);
-    }
-  });
+  function compressWebP() {
+    args.push(reducedInFile || inFile, '-o', outFile);
 
-  cmd.stderr.on('data', function(data) {
-    error += data;
-  });
+    var cmd = spawn('bin/cwebp', args).on('exit', function(code) {
+      if (code) {
+        res.status(400).json({
+          err: error
+        });
+        requestEnd();
+      }
+      else {
+        res.sendfile(outFile, requestEnd);
+      }
+    });
+
+    cmd.stderr.on('data', function(data) {
+      error += data;
+    });
+  }
+
+  if (req.body.colors) {
+    reduceColors(inFile, Number(req.body.colors) || 256, Boolean(req.body.dither), function(err, rif) {
+      if (err) {
+        res.status(400).json({
+          err: err
+        });
+        requestEnd();
+      }
+      else {
+        reducedInFile = rif;
+        compressWebP();
+      }
+    });
+  }
+  else {
+    compressWebP();
+  }
+
 });
 
 app.listen(3000);
