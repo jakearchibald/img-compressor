@@ -13,14 +13,15 @@
       var transform = spec.valueTransform;
       var val = spec.getVal();
 
-      if (val !== undefined) {
+      if (val) {
         val = spec.cast(val);
 
         if (transform) {
           val = transform(val);
         }
         
-        if (val !== undefined) {
+        // we're cool with explicit zeros
+        if (val || val === 0) {
           opts[spec.opt] = val;
         }
       }

@@ -86,6 +86,23 @@
       opt: 'strong'
     });
 
+    this.addOpt_({
+      field: '.alpha-filter',
+      cast: String,
+      opt: 'alpha_filter'
+    });
+
+    this.addOpt_({
+      field: '.alpha-cleanup',
+      opt: 'alpha_cleanup'
+    });
+
+    this.addOpt_({
+      field: '.hint',
+      cast: String,
+      opt: 'hint'
+    });
+
     ic.views.CompressorOptions.call(this);
   }
 

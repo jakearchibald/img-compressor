@@ -68,6 +68,9 @@ app.post('/compress/webp', function(req, res) {
   addArg('f');
   addArg('sharpness');
   addArg('strong', Boolean);
+  addArg('alpha_filter', String);
+  addArg('alpha_cleanup', Boolean);
+  addArg('hint', String);
 
   function requestEnd() {
     fs.unlink(outfile);
@@ -90,27 +93,6 @@ app.post('/compress/webp', function(req, res) {
     }
     else {
       res.sendfile(outfile, requestEnd);
-    }
-  });
-
-  cmd.stderr.on('data', function(data) {
-    error += data;
-  });
-});
-
-app.get('/img-test/', function(req, res) {
-  var error = '';
-  var outfile = 'img-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.webp';
-
-  var cmd = spawn('bin/cwebp', ['-q', '80', 'img-tmp/to-encode.png', '-o', outfile]).on('exit', function(code) {
-    if (code) {
-      console.log(error);
-      res.send(error);
-    }
-    else {
-      res.sendfile(outfile, function() {
-        fs.unlink(outfile);
-      });
     }
   });
 
