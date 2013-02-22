@@ -27,6 +27,17 @@
       }
     });
 
+    // check for applicable fields
+    this.optsSpec_.forEach(function(spec) {
+      spec.field.disabled = false;
+
+      if (spec.applicable && !spec.applicable(opts)) {
+        spec.field.disabled = true;
+        delete opts[spec.opt];
+      }
+    });
+
+
     this.opts = opts;
   };
 
@@ -39,7 +50,8 @@
       opt: '',               // target property in the opts object
       outputEl: null,        // element to show the current value in
       outputTransform: null, // transform the value before outputEl (function)
-      valueTransform: null   // transform the value before opts object (function)
+      valueTransform: null,  // transform the value before opts object (function)
+      applicable: null       // function passed the option object, return false to disable field
     }, params);
 
     if (!this.optsSpec_) {

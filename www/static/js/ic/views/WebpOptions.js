@@ -35,6 +35,10 @@
       outputTransform: function(val) {
         if (val == 100) return "Lossless";
         return val;
+      },
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
       }
     });
 
@@ -45,6 +49,10 @@
       outputTransform: function(val) {
         if (val === 0) return "Off";
         return val;
+      },
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
       }
     });
 
@@ -55,7 +63,11 @@
 
     this.addOpt_({
       field: '.segments',
-      opt: 'segments'
+      opt: 'segments',
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
+      }
     });
 
     this.addOpt_({
@@ -65,6 +77,10 @@
       outputTransform: function(val) {
         if (val === 0) return "Off";
         return val;
+      },
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
       }
     });
 
@@ -78,12 +94,20 @@
       },
       valueTransform: function(val) {
         return 7 - val;
+      },
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
       }
     });
 
     this.addOpt_({
       field: '.strong-filter',
-      opt: 'strong'
+      opt: 'strong',
+      applicable: function(opts) {
+        if (opts.lossless) return false;
+        return true;
+      }
     });
 
     this.addOpt_({
