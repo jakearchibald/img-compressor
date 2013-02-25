@@ -98,7 +98,8 @@ ColorReduce.prototype.start = function() {
   var colorReduce = this;
   var deferred = Q.defer();
   var error = '';
-  this.process_ = spawn('bin/pngquant', this._args).on('exit', function(code) {
+
+  this.process_ = spawn('bin/pngquant', this.args_).on('exit', function(code) {
     if (code) {
       deferred.reject(error);
     }
@@ -107,11 +108,8 @@ ColorReduce.prototype.start = function() {
     }
   });
 
+  this.process_.stdout.pipe(fs.createWriteStream(this.outFile));
   fs.createReadStream(this.inFile).pipe(this.process_.stdin);
-
-  this.process_.stdout.pipe(fs.createWriteStream(this.outFile, {
-    mode: 0644
-  }));
 
   this.process_.stderr.on('data', function(data) {
     error += data;
