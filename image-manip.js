@@ -162,28 +162,28 @@ JpegEncode.prototype.start = function() {
   return deferred.promise;
 };
 
-function BmpEncode(inFile) {
+function PpmEncode(inFile) {
   ImageProcess.call(this, inFile);
 
   this.outFile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.ppm';
   this.args_.push('-alpha', 'off', inFile, this.outFile);
 }
 
-exports.BmpEncode = BmpEncode;
+exports.PpmEncode = PpmEncode;
 
-BmpEncode.prototype = Object.create(ImageProcess.prototype);
+PpmEncode.prototype = Object.create(ImageProcess.prototype);
 
-BmpEncode.prototype.start = function() {
-  var bmpEncode = this;
+PpmEncode.prototype.start = function() {
+  var ppmEncode = this;
   var deferred = Q.defer();
   var error = '';
 
-  this.process_ = spawn('bin/imagemagick/bin/convert', this.args_).on('exit', function(code) {
+  this.process_ = spawn('convert', this.args_).on('exit', function(code) {
     if (code) {
       deferred.reject(error);
     }
     else {
-      deferred.resolve(bmpEncode.outFile);
+      deferred.resolve(ppmEncode.outFile);
     }
   });
 

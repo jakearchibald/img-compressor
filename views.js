@@ -97,7 +97,7 @@ exports.compressJpeg = function(req, res) {
   var imageProcesses = [];
 
   var deferred = Q.resolve('upload-tmp/' + id).then(function(inFile) {
-    var process = new imageManip.BmpEncode(inFile);
+    var process = new imageManip.PpmEncode(inFile);
     imageProcesses.push(process);
     return process.start();
   }).then(function(inFile) {
