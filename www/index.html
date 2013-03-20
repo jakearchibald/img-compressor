@@ -117,6 +117,68 @@
         Dither
       </label>
     </div>
+    <div class="jpeg-options-view">
+      <div class="field">
+        <label>
+          Quality:
+          <input type="range" value="80" min="0" max="100" class="quality">
+          <span class="quality-setting"></span>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="rgb" value="1">
+          Create RGB file
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="optimize" value="1" checked>
+          Optimise
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="progressive" value="1">
+          Progressive
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="arithmetic" value="1">
+          Arithmetic coding
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          DCT block size:
+          <input type="range" value="8" min="1" max="16" class="block">
+          <span class="block-setting"></span>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="rgb1" value="1">
+          RGB1
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          DCT Type:
+          <select class="dct">
+            <option value="int">Integer</option>
+            <option value="fast">Fast integer</option>
+            <option value="float">Floating-point</option>
+          </select>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" class="baseline" value="1">
+          Baseline
+        </label>
+      </div>
+    </div>
     <div class="image-stats-view">
       Size: <span class="size"></span>
     </div>

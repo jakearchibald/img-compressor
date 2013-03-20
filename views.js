@@ -75,3 +75,43 @@ exports.compressWebP = function(req, res) {
   });
 
 };
+
+exports.compressJpeg = function(req, res) {
+  var id = req.body.id;
+
+  if (!id) {
+    res.status(400).json({
+      err: "No ID"
+    });
+    return;
+  }
+
+  function requestEnd() {
+    imageProcesses.forEach(function(process) {
+      process.destroy();
+    });
+  }
+
+  res.on('close', requestEnd);
+
+  var imageProcesses = [];
+
+  var deferred = Q.resolve('upload-tmp/' + id).then(function(inFile) {
+    var process = new imageManip.BmpEncode(inFile);
+    imageProcesses.push(process);
+    return process.start();
+  }).then(function(inFile) {
+    var process = new imageManip.JpegEncode(inFile, req.body);
+    imageProcesses.push(process);
+    return process.start();
+  }).then(function(outFile) {
+    res.sendfile(outFile, requestEnd);
+  }).fail(function(error) {
+    console.error(error);
+    res.status(400).json({
+      err: error
+    });
+    requestEnd();
+  });
+
+};

@@ -8,5 +8,6 @@ app.use(express.bodyParser());
 app.get('/', views.index);
 app.post('/compress/upload', views.upload);
 app.post('/compress/webp', views.compressWebP);
+app.post('/compress/jpeg', views.compressJpeg);
 
 app.listen(3000);

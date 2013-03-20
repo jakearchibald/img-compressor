@@ -12,7 +12,7 @@ function ImageProcess(inFile) {
 
 ImageProcess.prototype.destroy = function() {
   if (this.process_) this.process_.kill();
-  //fs.unlink(this.outFile);
+  fs.unlink(this.outFile);
 };
 
 ImageProcess.prototype.addArg_ = function(prop, cast) {
@@ -110,6 +110,82 @@ ColorReduce.prototype.start = function() {
 
   this.process_.stdout.pipe(fs.createWriteStream(this.outFile));
   fs.createReadStream(this.inFile).pipe(this.process_.stdin);
+
+  this.process_.stderr.on('data', function(data) {
+    error += data;
+  });
+
+  return deferred.promise;
+};
+
+function JpegEncode(inFile, opts) {
+  ImageProcess.call(this, inFile);
+
+  this.outFile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.jpeg';
+  this.opts = opts;
+  this.addArg_('quality');
+  this.addArg_('rgb', Boolean);
+  this.addArg_('optimize', Boolean);
+  this.addArg_('progressive', Boolean);
+  this.addArg_('arithmetic', Boolean);
+  this.addArg_('block');
+  this.addArg_('rgb1', Boolean);
+  this.addArg_('dct', String);
+  this.addArg_('baseline', Boolean);
+
+  this.args_.push('-outfile', this.outFile, inFile);
+}
+
+exports.JpegEncode = JpegEncode;
+
+JpegEncode.prototype = Object.create(ImageProcess.prototype);
+
+JpegEncode.prototype.start = function() {
+  var webpEncode = this;
+  var deferred = Q.defer();
+  var error = '';
+
+  console.log(this.args_);
+  this.process_ = spawn('bin/jpeg/bin/cjpeg', this.args_).on('exit', function(code) {
+    if (code) {
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve(webpEncode.outFile);
+    }
+  });
+
+  this.process_.stderr.on('data', function(data) {
+    error += data;
+  });
+
+  return deferred.promise;
+};
+
+function BmpEncode(inFile) {
+  ImageProcess.call(this, inFile);
+
+  this.outFile = 'compress-tmp/' + Date.now() + Math.floor(Math.random() * 1000000) + '.ppm';
+  this.args_.push('-alpha', 'off', inFile, this.outFile);
+}
+
+exports.BmpEncode = BmpEncode;
+
+BmpEncode.prototype = Object.create(ImageProcess.prototype);
+
+BmpEncode.prototype.start = function() {
+  var bmpEncode = this;
+  var deferred = Q.defer();
+  var error = '';
+
+  this.process_ = spawn('bin/imagemagick/bin/convert', this.args_).on('exit', function(code) {
+    if (code) {
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve(bmpEncode.outFile);
+    }
+  });
 
   this.process_.stderr.on('data', function(data) {
     error += data;

@@ -18,6 +18,7 @@ module.exports = function(grunt) {
         'www/static/js/ic/models/Compressor.js',
         'www/static/js/ic/models/NullCompressor.js',
         'www/static/js/ic/models/WebpCompressor.js',
+        'www/static/js/ic/models/JpegCompressor.js',
         'www/static/js/ic/models/InputImage.js',
         'www/static/js/ic/EventEmitter.js',
         'www/static/js/ic/views/index.js',
@@ -26,6 +27,7 @@ module.exports = function(grunt) {
         'www/static/js/ic/views/ImageOutput.js',
         'www/static/js/ic/views/CompressorOptions.js',
         'www/static/js/ic/views/WebpOptions.js',
+        'www/static/js/ic/views/JpegOptions.js',
         'www/static/js/ic/views/ImageStats.js',
         'www/static/js/main.js'
       ]
